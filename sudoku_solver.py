@@ -23,7 +23,8 @@ def finish(array_board):
 
 
 def valid_row_col_or_square(some_list):
-    return (len(some_list) == 9 and sum(some_list) == 45)
+    return (len(some_list) == 9 and 
+            not len(some_list) == len(set(some_list)))
 
 
 def print_board(array_board):

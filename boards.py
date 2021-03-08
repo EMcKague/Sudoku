@@ -8,20 +8,9 @@ def getboard(difficulty=False):
     #     board_num = random.int(3, 6)
     # if difficulty == "HARD":
     #     board_num = random.int(6, 9)
-    board_num = random.randint(0, 5)
+    board_num = random.randint(0, 4)
     print(board_num)
     boards = [
-        [
-            [9, 0, 0, 0, 0, 0, 0, 0, 1],
-            [0, 0, 0, 0, 0, 3, 0, 8, 5],
-            [0, 0, 1, 0, 2, 0, 0, 0, 0],
-            [0, 0, 0, 5, 0, 7, 0, 0, 0],
-            [0, 0, 4, 0, 0, 0, 1, 0, 0],
-            [0, 9, 0, 0, 0, 0, 0, 0, 0],
-            [5, 0, 0, 0, 0, 0, 0, 7, 3],
-            [0, 0, 2, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 4, 0, 0, 0, 9]
-        ],
         [
             [0, 0, 0, 0, 7, 8, 0, 0, 2],
             [0, 0, 6, 0, 2, 4, 0, 5, 0],
