@@ -7,7 +7,7 @@ pip install pygame
 ```
 ## Usage
 requires python 3.9 
-Run python3 Sudoku.py from command line
+Run python3 Sudoku.py from command line from within same directory as boards.py & sudoku_solver.py
 
 ```
 python3 Sudoku.py
