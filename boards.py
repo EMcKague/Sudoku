@@ -1,13 +1,7 @@
 import random
 
 
-def getboard(difficulty=False):
-    # if difficulty == "EASY":
-    #     board_num = random.int(0, 3)
-    # if difficulty == "MEDIUM":
-    #     board_num = random.int(3, 6)
-    # if difficulty == "HARD":
-    #     board_num = random.int(6, 9)
+def getboard():
     board_num = random.randint(0, 4)
     print(board_num)
     boards = [
@@ -68,8 +62,4 @@ def getboard(difficulty=False):
         ]
     ]
 
-    # print(boards[0])
     return boards[board_num]
-
-
-# getboard()

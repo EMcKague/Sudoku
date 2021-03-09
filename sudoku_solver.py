@@ -4,7 +4,6 @@ import itertools
 def finish(array_board):
     """Checks if given board is a valid solution
     """
-    print_board(array_board)
 
     bad_rows = [row for row in array_board if not valid_row_col_or_square(row)]
     array_board = list(zip(*array_board))
@@ -23,8 +22,8 @@ def finish(array_board):
 
 
 def valid_row_col_or_square(some_list):
-    return (len(some_list) == 9 and 
-            not len(some_list) == len(set(some_list)))
+    return (len(some_list) == 9 and
+            len(some_list) == len(set(some_list)))
 
 
 def print_board(array_board):
@@ -34,7 +33,6 @@ def print_board(array_board):
         for el in row:
             temp.append(str(el))
         print(
-              # rowNum + 1,
               " ", '|'.join(temp[0:3]),
               " ", '|'.join(temp[3:6]),
               " ", '|'.join(temp[6:]))

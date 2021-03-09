@@ -31,10 +31,8 @@ class Board:
         }
 
     def create_board(self, difficulty):
-        """FUTURE TO DO, Gets a auto generated board from sudoku_board
-        idea:
-        board =[sudoku_board.boards.get_board("MEDIUM") * 9 for i in range(10)]
-        """
+        """Calls getboard() imported from boards.py to get a nested array
+        representing a board game"""
 
         board = getboard()
 
@@ -50,17 +48,14 @@ class Board:
         return duplicate
 
     def place_val(self, val):
-        """
-        """
-        # get the selected square
+        """Places the val entered into the square"""
         row, col = self._selected
 
         self._squares[row][col].set_val(val)
         self._duplicate = self.generate_duplicate_board()
 
     def draw_board(self, surf):
-        """
-        """
+        """Draws the board's grid lines and squares"""
         black = self._colors["BLACK"]
 
         # Grid lines
@@ -77,16 +72,17 @@ class Board:
                              (margin, self._height), thick)
 
         # Squares
-        # print(self._squares)
         for i in range(self._rows):
             for ii in range(self._cols):
-                # print("i=", i, 'ii=', ii)
                 self._squares[i][ii].draw_square(surf)
 
     def click_location(self, pos):
+        """Returns the click location
+
+        depending on the click location, returns a
+        dict = Name_of_object: (row, col) as it corresponds to game
+        Otherwise, returns None
         """
-        """
-        print('pos[0]=', pos[0], 'pos[1]=', pos[1])
 
         if pos[0] < self._width and pos[1] < self._height:
             col = pos[0] // self._margin
@@ -103,8 +99,8 @@ class Board:
             return None
 
     def set_selected(self, row, col):
-        """
-        """
+        """Sets square[row][col] to selected"""
+
         # iterates through each space and sets them all to false
         for i in range(self._rows):
             for ii in range(self._cols):
@@ -116,6 +112,8 @@ class Board:
         self._selected = (row, col)
 
     def set_up_board(self):
+        """Creates the first vals for board"""
+
         # iterate through each space in squares
         for i in range(self._rows):
             for ii in range(self._cols):
@@ -124,8 +122,7 @@ class Board:
                     self._squares[i][ii]._color = (191, 191, 191)
 
     def clear_square(self):
-        """
-        """
+        """Clears the val in the square"""
         row, col = self._selected
         # if square isn't immutable
         if not self._squares[row][col]._immutable:
@@ -133,8 +130,7 @@ class Board:
             self._squares[row][col].set_val(0)
 
     def mics_boxes(self, surf, play_time, end=False):
-        """
-        """
+        """Draws all the buttons and boxes not apart of the grid"""
         black = (0, 0, 0)
         green = (0, 212, 14)
         white = (245, 245, 245)
@@ -197,12 +193,14 @@ class Board:
         surf.blit(rules5, (15, y_loc + 70))
 
     def get_timer(self, secs):
+        """Formats the time"""
         sec = secs % 60
         minute = secs // 60
         new_time = str(minute) + ":" + str(sec).zfill(2)
         return new_time
 
     def get_score(self, secs):
+        """Returns a score based off the time that has passed"""
         diff = (secs // 5) * 2
         score = 1000 - diff
         if score < 0:
@@ -210,10 +208,10 @@ class Board:
         return str(score)
 
     def print_failure_msg(self, surf):
+        """Briefly displays failure msg on grid"""
         red = (255, 94, 94)
         x_loc = self._width/2 - 50
         y_loc = self._width/2 - 50
-        print("creating failure msg")
         largefont = pygame.font.SysFont("arial", 40, 1)
         text = largefont.render("INCORRECT!", 1, red)
         surf.blit(text, (x_loc, y_loc))
@@ -221,10 +219,10 @@ class Board:
         time.sleep(3)
 
     def print_success_msg(self, surf):
+        """Briefly displays success msg on grid"""
         red = (255, 94, 94)
         x_loc = self._width/2 - 50
         y_loc = self._width/2 - 50
-        print("creating success msg")
         largefont = pygame.font.SysFont("arial", 40, 1)
         text = largefont.render("YOU WIN!", 1, red)
         surf.blit(text, (x_loc, y_loc))
@@ -232,9 +230,9 @@ class Board:
         time.sleep(3)
 
     def solve(self, surf, play_time, board):
+        """Utilizes back tracking to find solution to current game"""
         empty_square = find_empty_square(self._duplicate)
         if not empty_square:
-            print("returning True")
             return True
 
         row, col = empty_square
@@ -255,7 +253,7 @@ class Board:
                 redraw_surface(surf, board, play_time)
                 pygame.display.update()
                 pygame.time.delay(30)
-        # print("returning False")
+
         return False
 
 
@@ -276,8 +274,7 @@ class Square:
         self._value = val
 
     def draw_square(self, surf):
-        """
-        """
+        """draws the squares in the game"""
         # Create vars to help with drawing
         font = pygame.font.SysFont('arial', 40)
         x = self._col * self._margin
@@ -312,36 +309,32 @@ class Square:
 def redraw_surface(surf, board, play_time, end=False):
     white = (255, 255, 255)
     surf.fill((white))
-    # print("play_time in redraw", play_time)
+
     if end:
         board.mics_boxes(surf, play_time, end)
     else:
         board.mics_boxes(surf, play_time)
 
-    # font = pygame.font.SysFont('arial', 40)
     board.draw_board(surf)
 
 
 def main():
-    # create surface, size 540, 600
-    surf = pygame.display.set_mode((540, 700))
-    # Change title for surface
-    pygame.display.set_caption("SUDOKU")
-    # Instantiate board
-    board = Board()
-    start = time.time()
-    stop = 0
-    end = False
-    solved = False
-    running = True
-    key = None
+    # Useful game vars
+    surf = pygame.display.set_mode((540, 700))  # Size of game
+    pygame.display.set_caption("SUDOKU")        # Title at the top of window
+    board = Board()                             # Instantiates board
+    start = time.time()                         # Starts the timer
+    stop = 0                                    # Creates a stop for timer
+    end = False                                 # check if game is ended
+    solved = False                              # check if game is solved
+    running = True                              # check if game is running
+    key = None                                  # to register inputs
 
     while running:
 
         play_time = round(time.time() - start)
 
         for event in pygame.event.get():
-            # standard exit pygame
             if event.type == pygame.QUIT:
                 running = False
 
@@ -366,44 +359,28 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
-                print("event.key =", event.key, pygame.K_DELETE)
+
                 # set up delete key
                 if (event.key == pygame.K_DELETE
                    or event.key == pygame.K_BACKSPACE):
-                    print("deleting")
                     board.clear_square()
                     key = None
 
-                # set up enter key
-                # if event.key == pygame.K_RETURN:
-                #     board.place
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(pos[0], pos[1])
 
                 clicked = board.click_location(pos)
                 if clicked:
 
                     if "FINISH" in clicked:
-                        print("calling finished function")
-                        # pause time
-                        # pause_game = time.time()
-                        # redraw_surface(surf, board, pause_game)
-                        # call finish function
-                        print(board._duplicate)
-                        done = finish(board._duplicate)
-                        print("is done?", done)
+
+                        done = finish(board._duplicate)     # check if finished
+
                         if done:
-                            # print validation msg
-                            board.print_success_msg(surf)
-                            # stop time
-                            end = True
+                            board.print_success_msg(surf)  # prints success msg
+                            end = True  # game has eneded
                         else:
-                            # print try again msg
-                            print("NOT DONE")
-                            board.print_failure_msg(surf)
-                            redraw_surface(surf, board, play_time)
+                            board.print_failure_msg(surf)  # prints failure msg
 
                     if "SQUARE" in clicked:
                         row, col = clicked["SQUARE"]
@@ -411,15 +388,11 @@ def main():
                         key = None
 
                     if "SOLVE" in clicked:
-                        print("calling solve function")
-                        # set score to 0
                         solved = True
-                        # stop time
                         stop = play_time
-                        # call solve function
                         board.solve(surf, play_time, board)
 
-        if board._selected and key:
+        if board._selected and key and not(solved or end):
             if not board._squares[row][col]._immutable:
                 board.place_val(key)
 
